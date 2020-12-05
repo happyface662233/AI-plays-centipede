@@ -14,7 +14,7 @@ def makeGrid():
     pass
 def generatePath(x:int ,y:int)->list:#x and y tile not coord
     path = []
-    while y >tilesHeight-(math.trunc(tilesHeight/3)):
+    while y >tilesHeight-(trunc(tilesHeight/3)):
         choice=randint(0,3)
         print('looping',choice)
         if choice == 0 and x!= tilesWide:
