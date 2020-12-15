@@ -7,16 +7,18 @@ class Bullet:
         self.x = x
         self.y = y
         self.velX = 0
-        self.velY = 3
-
+        self.velY = -1
+        self.alive = True
     def move(self):
         self.x += self.velX
         self.y += self.velY
 
     def isCollided(self, snake, grid):
-        for piece in snake:
-            if piece[0] == self.x and piece[1] == self.y:
+        for piece in snake.body:
+            if piece['x'] == self.x and piece['y'] == self.y:
                 print('bullet hit the snake')
+                self.alive = False
+    
 
     def show(self, win):
         pygame.draw.rect(win, (255, 0, 255), pygame.Rect(

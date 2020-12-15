@@ -16,9 +16,10 @@ win = pygame.display.set_mode((size))
 pygame.display.set_caption("AI Leans Centipede")
 
 
-def moveSnake(grid, s):
-    while True:
-        s.move(grid)
+def moveSnake(s):
+    while end == False:
+        s.move()
+        sleep(sleepForSnake)
 
 
 def notInEmpty(empty, x, y):
@@ -77,41 +78,47 @@ grid = makeGrid(empty)
 running = True
 p = player(5, 5)
 p.shoot()
-# t = threading.Thread(target=moveSnake, args=[grid, s])
-# t.start()
+t = threading.Thread(target=moveSnake, args=[s])
+t.start()
+s.grid = grid
+
+
 while running:
+    clock.tick(FPS)
     win.fill((0, 0, 0))
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            end = True
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 p.moveUp()
-                print('pressed')
+                #print('pressed')
             elif event.key == pygame.K_s:
                 p.moveDown()
             elif event.key == pygame.K_a:
                 p.moveLeft()
             elif event.key == pygame.K_d:
                 p.moveRight()
+            elif event.key == pygame.K_SPACE:
+                p.shoot()
             break
     for space in grid:
         # print(space[0]*(width/tilesWide))
         pygame.draw.rect(win, (0, 0, 255), pygame.Rect(
             space[0]*(width/tilesWide), space[1]*(height/tilesHeight), width/tilesWide, height/tilesHeight))
-    s.move(grid)
+    #s.move(grid)
     # s.move([])
     win = s.show(win)
     win = p.show(win)
 
-    win = p.update(win)
+    win = p.update(win,s,grid)
     # pygame.draw.rect(win, (0, 0, 255), pygame.Rect(
     #     1*(s.width/s.tilesWide), 1*(s.height/s.tilesHeight), s.width/s.tilesWide, s.height/s.tilesHeight))
 
     # print(s.x,s.y)
-    pygame.display.flip(
-    )
+    pygame.display.flip()
     #print(1*(s.width/s.tilesWide), 1*(s.height/s.tilesHeight))
-    sleep(sleepTime)
+
 
 pygame.quit()

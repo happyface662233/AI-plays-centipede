@@ -26,10 +26,13 @@ class player:
     def shoot(self):
         self.bullets.append(Bullet(self.x, self.y))
 
-    def update(self, win):
+    def update(self, win,s,grid):
         for bullet in self.bullets:
             bullet.move()
             win = bullet.show(win)
+            if bullet.alive == False:
+                self.bullets.remove(bullet)
+            bullet.isCollided(s,grid)
         return win
 
     def show(self, win):
