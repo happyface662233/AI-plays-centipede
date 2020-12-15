@@ -6,12 +6,8 @@ from settings import *
 
 
 class snakeEnemy:
-    def __init__(self, x, y, length, tilesHeight, tilesWide, width, height):
+    def __init__(self, x, y, length):
         # global tilesWide,tilesHeight,width,height
-        self.tilesHeight = tilesHeight
-        self.tilesWide = tilesWide
-        self.width = width
-        self.height = height
         self.x = x
         self.y = y
         self.length = length
@@ -19,6 +15,7 @@ class snakeEnemy:
         self.changeMap = []
         self.grid = []
         self.dead = False
+
     def createBody(self, currentVector: list):
         body = []
         for i in range(0, self.length):
@@ -45,7 +42,7 @@ class snakeEnemy:
     #                 piece['vX'] = change[2]
     #                 piece['yX'] = change[3]
     def move(self):
-        
+
         for i, b in enumerate(self.body):
             if b['y'] < 0:
                 #print('I AM BELLOW ONE ', self.body[i]['y'])
@@ -85,7 +82,8 @@ class snakeEnemy:
         for piece in self.body:
             # pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
             #     100, 100, 100, 100))
+            print('MESSED UP BODY ', piece)
             pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
-                piece['x']*(self.width/self.tilesWide), piece['y']*(self.height/self.tilesHeight), self.width/self.tilesWide, self.height/self.tilesHeight))
+                piece['x']*(width/tilesWide), piece['y']*(height/tilesHeight), width/tilesWide, height/tilesHeight))
             # print('PIECE ', piece['x'], piece['y'])
         return win

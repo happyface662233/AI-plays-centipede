@@ -26,14 +26,14 @@ class player:
     def shoot(self):
         self.bullets.append(Bullet(self.x, self.y))
 
-    def update(self, win,s,grid):
+    def update(self, win, ss, grid):
         for bullet in self.bullets:
             bullet.move()
             win = bullet.show(win)
             if bullet.alive == False:
                 self.bullets.remove(bullet)
-            bullet.isCollided(s,grid)
-        return win
+            snakes = bullet.isCollided(ss, grid)
+        return win, snakes
 
     def show(self, win):
         pygame.draw.rect(win, (0, 255, 0), pygame.Rect(

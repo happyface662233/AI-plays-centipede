@@ -69,8 +69,7 @@ def generatePath(x: int, y: int) -> list:  # x and y tile not coord
 path1 = generatePath(0, 0)
 path2 = generatePath(trunc(tilesWide/2), 0)
 # print(path2)
-s = SnakeEnemy.snakeEnemy(trunc(tilesWide/2), 0,
-                          10, tilesHeight, tilesWide, width, height)
+snakes = [SnakeEnemy.snakeEnemy(trunc(tilesWide/2), 0, 10)]
 path3 = generatePath(tilesWide, 0)
 empty = path1+path2+path3
 # print(len(path3))
@@ -78,9 +77,9 @@ grid = makeGrid(empty)
 running = True
 p = player(5, 5)
 p.shoot()
-t = threading.Thread(target=moveSnake, args=[s])
+t = threading.Thread(target=moveSnake, args=[snakes[0]])
 t.start()
-s.grid = grid
+snakes[0].grid = grid
 
 
 while running:
@@ -93,7 +92,7 @@ while running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 p.moveUp()
-                #print('pressed')
+                # print('pressed')
             elif event.key == pygame.K_s:
                 p.moveDown()
             elif event.key == pygame.K_a:
@@ -107,12 +106,21 @@ while running:
         # print(space[0]*(width/tilesWide))
         pygame.draw.rect(win, (0, 0, 255), pygame.Rect(
             space[0]*(width/tilesWide), space[1]*(height/tilesHeight), width/tilesWide, height/tilesHeight))
-    #s.move(grid)
+    # s.move(grid)
     # s.move([])
-    win = s.show(win)
+    for s in snakes:
+        win = s.show(win)
     win = p.show(win)
 
-    win = p.update(win,s,grid)
+    win, ns = p.update(win, snakes, grid)
+
+    if ns != []:
+        print(ns)
+        for s in ns:
+            s.grid = grid
+            snakes.append(s)
+            t = threading.Thread(target=moveSnake, args=[s])
+            t.start()
     # pygame.draw.rect(win, (0, 0, 255), pygame.Rect(
     #     1*(s.width/s.tilesWide), 1*(s.height/s.tilesHeight), s.width/s.tilesWide, s.height/s.tilesHeight))
 
