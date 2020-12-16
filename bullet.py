@@ -5,6 +5,7 @@ from SnakeEnemy import snakeEnemy
 
 class Bullet:
     def __init__(self, x, y):
+
         self.x = x
         self.y = y
         self.velX = 0
@@ -19,11 +20,12 @@ class Bullet:
         newSnakes = []
         for snake in snakes:
             for i, piece in enumerate(snake.body):
-                if piece['x'] == self.x and piece['y'] == self.y:
+                if piece['x'] == self.x and piece['y'] == self.y and snake.frames > 30:
                     print('NORMAL SNAKE BODY', snakes[0].body)
                     print('bullet hit the snake')
                     self.alive = False
-                    snake.end = True
+                    snake.dead = True
+                    print('KILLING')
                     snakeBody1 = snake.body[:i]
                     print('SNAKE BODY 1', snakeBody1)
                     snakeBody2 = snake.body[i:]
@@ -53,6 +55,8 @@ class Bullet:
                         snake1 = snakeEnemy(
                             snake.body[0]['x'], snake.body[0]['y'], 0)
                         snake1.body = snakeBody1
+                    snake1.changeMap = snake.changeMap
+                    snake2.changeMap = snake.changeMap
                     newSnakes.append(snake1)
                     newSnakes.append(snake2)
                     print(newSnakes)

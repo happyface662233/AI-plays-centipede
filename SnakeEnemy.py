@@ -15,6 +15,8 @@ class snakeEnemy:
         self.changeMap = []
         self.grid = []
         self.dead = False
+        self.frames = 0
+        # print('MAKING')
 
     def createBody(self, currentVector: list):
         body = []
@@ -54,10 +56,13 @@ class snakeEnemy:
                 for g in self.grid:
                     # print('GGGGGGG: ', g)
                     # print(b, g)
-                    if i == 0:
+                    if i == 0 or i == len(self.body)-1:
+
                         if (g[0] == b['x']) and (g[1] == b['y']):
 
                             self.bounce(i)
+                            # if i == len(self.body)-1:
+                            #     # print('bouncing')
                             break
                         elif b['x'] == 0 or b['x'] == tilesWide:
 
@@ -68,8 +73,7 @@ class snakeEnemy:
                                 # print(
                                 #     'I AM NOT THE LEADER BUT I AM BOUNCING ', b, c)
                                 self.bounce(i)
-                if self.dead == True:
-                    self
+            self.frames += 1
 
     def bounce(self, i):
         self.body[i]['vX'] *= -1
@@ -82,7 +86,7 @@ class snakeEnemy:
         for piece in self.body:
             # pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
             #     100, 100, 100, 100))
-            print('MESSED UP BODY ', piece)
+            #print('MESSED UP BODY ', piece)
             pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
                 piece['x']*(width/tilesWide), piece['y']*(height/tilesHeight), width/tilesWide, height/tilesHeight))
             # print('PIECE ', piece['x'], piece['y'])

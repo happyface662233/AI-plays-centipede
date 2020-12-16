@@ -17,7 +17,7 @@ pygame.display.set_caption("AI Leans Centipede")
 
 
 def moveSnake(s):
-    while end == False:
+    while s.dead == False and end == False:
         s.move()
         sleep(sleepForSnake)
 
@@ -75,7 +75,7 @@ empty = path1+path2+path3
 # print(len(path3))
 grid = makeGrid(empty)
 running = True
-p = player(5, 5)
+p = player(25, 24)
 p.shoot()
 t = threading.Thread(target=moveSnake, args=[snakes[0]])
 t.start()
@@ -127,6 +127,11 @@ while running:
     # print(s.x,s.y)
     pygame.display.flip()
     #print(1*(s.width/s.tilesWide), 1*(s.height/s.tilesHeight))
+    new = []
+    for i, s in enumerate(snakes):
+        if s.dead == False:
+            new.append(s)
+    snakes = new
 
 
 pygame.quit()
