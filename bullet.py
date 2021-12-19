@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from SnakeEnemy import snakeEnemy
+import math
 
 
 class Bullet:
@@ -20,55 +21,42 @@ class Bullet:
         newSnakes = []
         for snake in snakes:
             for i, piece in enumerate(snake.body):
-                if piece['x'] == self.x and piece['y'] == self.y and snake.frames > 30:
-                    print('NORMAL SNAKE BODY', snakes[0].body)
-                    print('bullet hit the snake')
-                    self.alive = False
-                    snake.dead = True
-                    print('KILLING')
-                    snakeBody1 = snake.body[:i]
-                    print('SNAKE BODY 1', snakeBody1)
-                    snakeBody2 = snake.body[i:]
-                    if piece['vX'] == -1:
-                        # snake 2 should go the opposite way
-                        #snakeBody1_ = [i['vX']*-1 for i in snakeBody1]
-                        snakeBody1_ = []
-                        for i in snakeBody1:
-                            i['vX'] *= -1
-                            snakeBody1_.append(i)
+                print(
+                    f"snake body = [{piece['x']}, {piece['y']}], {self.x}, {self.y}")
+                # if piece['x']-1 > self.x > piece['x']+1 and round(piece['y']) == round(self.y):
+                if self.x-1 < piece['x'] < self.x+1 and self.y-1 < piece['y'] < self.y+1:
+                    print('hit')
+                    return (True, snake, piece)
+        return [False, None, None]
 
-                        snake1 = snakeEnemy(
-                            snake.body[-1]['x'], snake.body[-1]['y'], 0)
-                        snake1.body = snakeBody1_
-                        snake2 = snakeEnemy(
-                            snake.body[0]['x'], snake.body[0]['y'], 0)
-                        snake2.body = snakeBody2
-                    else:
-                        #snakeBody2_ = [i['vX'] * -1 for i in snakeBody2]
-                        snakeBody2_ = []
-                        for i in snakeBody2:
-                            i['vX'] *= -1
-                            snakeBody2_.append(i)
-                        snake2 = snakeEnemy(
-                            snake.body[-1]['x'], snake.body[-1]['y'], 0)
-                        snake2.body = snakeBody2_
-                        snake1 = snakeEnemy(
-                            snake.body[0]['x'], snake.body[0]['y'], 0)
-                        snake1.body = snakeBody1
-                    snake1.changeMap = snake.changeMap
-                    snake2.changeMap = snake.changeMap
-                    newSnakes.append(snake1)
-                    newSnakes.append(snake2)
-                    print(newSnakes)
-        return newSnakes
+    def create_two_snakes(self, snakes, snake, piece):
+        index = snakes.index(snake)
+        hit_snake = snakes[index]
+
+        piece_index = snake.body.index(piece)
+        # b,b,b,#b,b,b,b
+        # attrs dont matter well overwrite them in a min
+        if len(hit_snake.body) == 1:
+            return{'snakes': [], 'blockCoords': [round(piece['x']), round(piece['y'])]}
+
+        s1 = snakeEnemy(0, 0, 1)
+        s1.body = snake.body[:piece_index]
+        s2 = snakeEnemy(0, 0, 1)
+        s2.body = snake.body[piece_index+1:]
+        s1.changeMap = snake.changeMap
+        s2.changeMap = snake.changeMap
+
+        # if hit_snake.body[0]['vX'] > 0:
+        #     s1.bounce(-1)
+        return {'snakes': [s1, s2], 'blockCoords': [round(piece['x']), round(piece['y'])]}
 
     def show(self, win):
         pygame.draw.rect(win, (255, 0, 255), pygame.Rect(
-            self.x*(width/tilesWide), self.y*(height/tilesHeight), width/tilesWide, height/tilesHeight))
+            round(self.x)*(width/tilesWide), round(self.y)*(height/tilesHeight), width/tilesWide, height/tilesHeight))
         return win
 
 
-'''            
+'''
 pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
                 piece['x']*(self.width/self.tilesWide), piece['y']*(self.height/self.tilesHeight), self.width/self.tilesWide, self.height/self.tilesHeight))
                 '''
