@@ -2,20 +2,25 @@ from random import randint
 import pygame
 from time import sleep
 from settings import *
+import math
 # from gameScreen import tilesHeight,tilesWide,width,height
 
 
 class snakeEnemy:
     def __init__(self, x, y, length):
         # global tilesWide,tilesHeight,width,height
+        #self.default_speed_component = 0.2
+        self.default_speed_component = 1
+
         self.x = x
         self.y = y
         self.length = length
-        self.body = self.createBody([1, 0])
+        self.body = self.createBody([self.default_speed_component, 0])
         self.changeMap = []
         self.grid = []
         self.dead = False
         self.frames = 0
+
         # print('MAKING')
 
     def createBody(self, currentVector: list):
@@ -46,6 +51,8 @@ class snakeEnemy:
     def move(self):
 
         for i, b in enumerate(self.body):
+            if b['x'] < 0:
+                print('big error here')
             if b['y'] < 0:
                 #print('I AM BELLOW ONE ', self.body[i]['y'])
                 self.body[i]['y'] += 1
@@ -58,13 +65,13 @@ class snakeEnemy:
                     # print(b, g)
                     if i == 0 or i == len(self.body)-1:
 
-                        if (g[0] == b['x']) and (g[1] == b['y']):
+                        if (g[0] == round(b['x'])) and (g[1] == round(b['y'])):
 
                             self.bounce(i)
                             # if i == len(self.body)-1:
                             #     # print('bouncing')
                             break
-                        elif b['x'] == 0 or b['x'] == tilesWide:
+                        elif round(b['x']) <= 0 or round(b['x']) == tilesWide:
 
                             self.bounce(i)
                     else:
@@ -76,6 +83,7 @@ class snakeEnemy:
             self.frames += 1
 
     def bounce(self, i):
+        # print('bounce')
         self.body[i]['vX'] *= -1
         self.body[i]['y'] += 1
         self.body[i]['x'] += self.body[i]['vX']
