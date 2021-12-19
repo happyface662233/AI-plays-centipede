@@ -6,6 +6,7 @@ import math
 
 class player:
     def __init__(self, x, y):
+        self.dead = False
         self.x = x
         self.y = y
         self.vel = 1
@@ -48,7 +49,10 @@ class player:
                 ss[ss.index(res[1])].dead = True
                 ss[ss.index(res[1])].alive = False
                 grid.append(res2['blockCoords'])
-
+        for snake in ss:
+            for p in snake.body:
+                if self.x -1< p['x']<self.x+1 and self.y-1< p['y']<self.y+1:
+                    self.dead = True
         return win, ss, grid  # res2['blockCoords']
 
     def show(self, win):

@@ -10,6 +10,8 @@ from settings import *
 from player import player
 import threading
 import os
+from spider import Spider
+
 # print(dir(SnakeEnemy))
 pygame.init()
 threads = []
@@ -82,6 +84,8 @@ empty = path1+path2+path3
 grid = makeGrid(empty)
 running = True
 p = player(tilesWide/2, tilesHeight-2)
+spider = Spider(-1,tilesHeight-6)
+
 # t = threading.Thread(target=moveSnake, args=[snakes[0]])
 # t.start()
 snakes[0].grid = grid
@@ -124,6 +128,8 @@ while running:
     for s in snakes:
         win = s.show(win)
     win = p.show(win)
+    
+    win =spider.show(win)
 
     win, snakes, grid = p.update(win, snakes, grid)
 
@@ -134,6 +140,8 @@ while running:
             # print('moving')
             if frame % (FPS//15) == 0:
                 snake.move()
+                spider.Move()
+                
 
     # pygame.draw.ret(win, (0, 0, 255), pygame.Rect(
     #     1*(s.width/s.tilesWide), 1*(s.height/s.tilesHeight), s.width/s.tilesWide, s.height/s.tilesHeight))
@@ -147,5 +155,10 @@ while running:
             new.append(s)
     snakes = new
     frame += 1
+    if spider.isHittingPlayer(p)== True:
+        p.dead = True
+    if p.dead == True:
+        break
+    
 
 pygame.quit()

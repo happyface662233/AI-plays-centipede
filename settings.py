@@ -5,7 +5,7 @@ tilesWide = 30
 sleepTime = 0.025
 sleepForSnake = 0.1
 divertThresh = 3
-size = width, height = 256, 240
+size = width, height = 256*2, 240*2
 end = False
 FPS = 120
 clock = pygame.time.Clock()
