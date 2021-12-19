@@ -21,11 +21,11 @@ class Bullet:
         newSnakes = []
         for snake in snakes:
             for i, piece in enumerate(snake.body):
-                print(
-                    f"snake body = [{piece['x']}, {piece['y']}], {self.x}, {self.y}")
+                #print(
+                    #f"snake body = [{piece['x']}, {piece['y']}], {self.x}, {self.y}")
                 # if piece['x']-1 > self.x > piece['x']+1 and round(piece['y']) == round(self.y):
                 if self.x-1 < piece['x'] < self.x+1 and self.y-1 < piece['y'] < self.y+1:
-                    print('hit')
+                    #print('hit')
                     return (True, snake, piece)
         return [False, None, None]
 
