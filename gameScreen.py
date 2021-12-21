@@ -12,6 +12,8 @@ import threading
 import os
 from spider import Spider
 
+
+TRAINING = True
 # print(dir(SnakeEnemy))
 pygame.init()
 threads = []
@@ -24,16 +26,13 @@ image = pygame.image.load(os.path.join('assets', 'mushroom.png'))
 image = pygame.transform.scale(image, (width//tilesWide, height//tilesHeight))
 
 
-def moveSnake(s):
-    while s.dead == False and end == False:
-        s.move()
-        sleep(sleepForSnake)
+
 
 
 def notInEmpty(empty, x, y):
     for e in empty:
         if e[0] == x and e[1] == y:
-            return True
+            return True 
     return False
 
 
@@ -73,23 +72,23 @@ def generatePath(x: int, y: int) -> list:  # x and y tile not coord
 
     return path
 
+def createGame():
+    global running, p,spider, grid,frame
+    path1 = generatePath(0, 0)
+    path2 = generatePath(trunc(tilesWide/2), 0)
+    # print(path2)
+    snakes = [SnakeEnemy.snakeEnemy(trunc(tilesWide/2), 0, 5)]
+    path3 = generatePath(tilesWide, 0)
+    empty = path1+path2+path3
+    # print(len(path3))
+    grid = makeGrid(empty)
+    running = True
+    p = player(tilesWide/2, tilesHeight-2)
+    spider = Spider(-1,tilesHeight-6)
 
-path1 = generatePath(0, 0)
-path2 = generatePath(trunc(tilesWide/2), 0)
-# print(path2)
-snakes = [SnakeEnemy.snakeEnemy(trunc(tilesWide/2), 0, 5)]
-path3 = generatePath(tilesWide, 0)
-empty = path1+path2+path3
-# print(len(path3))
-grid = makeGrid(empty)
-running = True
-p = player(tilesWide/2, tilesHeight-2)
-spider = Spider(-1,tilesHeight-6)
 
-# t = threading.Thread(target=moveSnake, args=[snakes[0]])
-# t.start()
-snakes[0].grid = grid
-frame = 0
+    snakes[0].grid = grid
+    frame = 0
 
 while running:
     # print(len(snakes))
@@ -100,23 +99,24 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             end = True
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_w:
+        if TRAINING == False:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
 
-                p.moveUp()
-                # if p.y == tilesHeight-1:
-                #     p.acc = -2
-                # # print('pressed')
-            elif event.key == pygame.K_s:
+                    p.moveUp()
+                    # if p.y == tilesHeight-1:
+                    #     p.acc = -2
+                    # # print('pressed')
+                elif event.key == pygame.K_s:
 
-                p.moveDown()
-            elif event.key == pygame.K_a:
-                p.moveLeft()
-            elif event.key == pygame.K_d:
-                p.moveRight()
-            elif event.key == pygame.K_SPACE:
-                p.shoot()
-            break
+                    p.moveDown()
+                elif event.key == pygame.K_a:
+                    p.moveLeft()
+                elif event.key == pygame.K_d:
+                    p.moveRight()
+                elif event.key == pygame.K_SPACE:
+                    p.shoot()
+                break
     for space in grid:
         # print(space[0]*(width/tilesWide))
         # pygame.draw.rect(win, (0, 0, 255), pygame.Rect(
@@ -131,7 +131,7 @@ while running:
     
     win =spider.show(win)
 
-    win, snakes, grid = p.update(win, snakes, grid)
+    win, snakes, grid,spider = p.update(win, snakes, grid,spider)
 
     for snake in snakes:
         snake.grid = grid
@@ -158,7 +158,7 @@ while running:
     if spider.isHittingPlayer(p)== True:
         p.dead = True
     if p.dead == True:
-        break
+        createGame()
     
 
 pygame.quit()

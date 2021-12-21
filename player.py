@@ -29,7 +29,7 @@ class player:
     def shoot(self):
         self.bullets.append(Bullet(math.floor(self.x), math.floor(self.y)))
 
-    def update(self, win, ss, grid):
+    def update(self, win, ss, grid,spider):
 
         # print(grid)
         blockCoords = None
@@ -41,7 +41,9 @@ class player:
             win = bullet.show(win)
             if bullet.alive == False:
                 self.bullets.remove(bullet)
-            res = bullet.isCollided(ss, grid)
+            res = bullet.isCollided(ss, grid,spider)
+            if bullet.check_spider(spider) == True:
+                spider.dead =True
             if res[0] == True:
                 res2 = bullet.create_two_snakes(ss, res[1], res[2])
                 ss += res2['snakes']
@@ -53,7 +55,7 @@ class player:
             for p in snake.body:
                 if self.x -1< p['x']<self.x+1 and self.y-1< p['y']<self.y+1:
                     self.dead = True
-        return win, ss, grid  # res2['blockCoords']
+        return win, ss, grid,spider  # res2['blockCoords']
 
     def show(self, win):
         pygame.draw.rect(win, (0, 255, 0), pygame.Rect(

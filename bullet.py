@@ -17,7 +17,7 @@ class Bullet:
         self.x += self.velX
         self.y += self.velY
 
-    def isCollided(self, snakes, grid):
+    def isCollided(self, snakes, grid,spider):
         newSnakes = []
         for snake in snakes:
             for i, piece in enumerate(snake.body):
@@ -28,7 +28,10 @@ class Bullet:
                     # print('hit')
                     return (True, snake, piece)
         return [False, None, None]
-
+    def check_spider(self,s):
+        if self.x-1 < s.x < self.x+1 and self.y-1 < s.y < self.y+1:
+            return True
+        return False
     def create_two_snakes(self, snakes, snake, piece):
         index = snakes.index(snake)
         hit_snake = snakes[index]

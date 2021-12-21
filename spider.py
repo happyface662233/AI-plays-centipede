@@ -17,7 +17,8 @@ class Queue:
         return None
     def __len__(self):
         return len(self.q)
-    
+    def clear(self):
+        self.q =[]
 
 class Spider:
     def __init__(self, x, y):
@@ -26,7 +27,9 @@ class Spider:
         self.actions = Queue()
         self.max_height = 5
         self.speed = 1
+        self.dead =False
     def Chose(self):
+        
         move = 0.7
         prob_right = 1-move
         r = random()
@@ -40,14 +43,20 @@ class Spider:
             self.actions.enqueue({
                 'x':self.x+1,
                 'y':self.y
+                
             })
+            print('CHOSE')
+            
     def Move(self):
         #print(len(self.actions))
         
+
+
         if len(self.actions)==0:
             self.Chose()
         else:
-            #print(self.actions.peak())
+            
+        #print(self.actions.peak())
             if self.x-self.actions.peak()['x'] == 0 and self.y-self.actions.peak()['y'] == 0:
                 self.actions.dequeue()
                 self.Chose()
@@ -60,8 +69,15 @@ class Spider:
                         self.y-=self.speed
                     else:
                         self.y+=self.speed
+
+
         if self.x>tilesWide:
             self.x= -1
+        if self.dead == True:
+            self.x=3 #delays it respawn 
+            self.actions.clear()
+            self.Chose()
+            self.dead = False
     def isHittingPlayer(self,p):
         if p.x== self.x and p.y== self.y:
             return True
