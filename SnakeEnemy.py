@@ -2,12 +2,14 @@ from random import randint
 import pygame
 from time import sleep
 from settings import *
-import math
+import os
 # from gameScreen import tilesHeight,tilesWide,width,height
 
 
 class snakeEnemy:
     def __init__(self, x, y, length):
+        image = pygame.image.load(os.path.join('assets', 'body.png'))
+        self.image = pygame.transform.scale(image, (width//tilesWide, height//tilesHeight))
         # global tilesWide,tilesHeight,width,height
         #self.default_speed_component = 0.2
         self.default_speed_component = 1
@@ -95,7 +97,8 @@ class snakeEnemy:
             # pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
             #     100, 100, 100, 100))
             #print('MESSED UP BODY ', piece)
-            pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
-                piece['x']*(width/tilesWide), piece['y']*(height/tilesHeight), width/tilesWide, height/tilesHeight))
+            # pygame.draw.rect(win, (255, 0, 0), pygame.Rect(
+            #     piece['x']*(width/tilesWide), piece['y']*(height/tilesHeight), width/tilesWide, height/tilesHeight))
+            win.blit(self.image,(piece['x']*(width/tilesWide), piece['y']*(height/tilesHeight), width/tilesWide, height/tilesHeight))
             # print('PIECE ', piece['x'], piece['y'])
         return win

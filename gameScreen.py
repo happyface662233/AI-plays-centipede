@@ -73,7 +73,7 @@ def generatePath(x: int, y: int) -> list:  # x and y tile not coord
     return path
 
 def createGame():
-    global running, p,spider, grid,frame
+    global running, p,spider, grid,frame,snakes
     path1 = generatePath(0, 0)
     path2 = generatePath(trunc(tilesWide/2), 0)
     # print(path2)
@@ -89,7 +89,7 @@ def createGame():
 
     snakes[0].grid = grid
     frame = 0
-
+createGame()
 while running:
     # print(len(snakes))
 

@@ -2,6 +2,9 @@ from collections import deque
 from random import random,randint
 import pygame
 from settings import *
+import os
+image = pygame.image.load(os.path.join('assets', 'spiderv2.png'))
+image = pygame.transform.scale(image, (width//tilesWide, height//tilesHeight))
 class Queue:
     def __init__(self):
         self.q=[]
@@ -22,6 +25,8 @@ class Queue:
 
 class Spider:
     def __init__(self, x, y):
+        image = pygame.image.load(os.path.join('assets', 'spiderv2.png'))
+        self.image = pygame.transform.scale(image, (width//tilesWide, height//tilesHeight))
         self.x = x
         self.y = y
         self.actions = Queue()
@@ -83,8 +88,10 @@ class Spider:
             return True
         return False
     def show(self, win):
-        pygame.draw.rect(win, (255, 255, 0), pygame.Rect(
-            self.x*(width/tilesWide), self.y*(height/tilesHeight), width/tilesWide, height/tilesHeight))
+        # pygame.draw.rect(win, (255, 255, 0), pygame.Rect(
+        #     self.x*(width/tilesWide), self.y*(height/tilesHeight), width/tilesWide, height/tilesHeight))
+
+        win.blit(self.image,(self.x*(width/tilesWide), self.y*(height/tilesHeight), width/tilesWide, height/tilesHeight))
         return win
 
 
